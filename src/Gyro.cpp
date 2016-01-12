@@ -26,6 +26,19 @@ Gyro::Gyro(uint8_t sspin) {
   SPI.endTransaction();
 }
 
+uint32_t Gyro::read()
+{
+	SPI.beginTransaction(SPISettings(CLOCK_SPEED, MSBFIRST, SPI_MODE0));
+    digitalWrite(_sspin, LOW);
+    uint8_t b1 = SPI.transfer((READ_WORD >> 24) & 0xff);
+    uint8_t b2 = SPI.transfer((READ_WORD >> 16) & 0xff);
+    uint8_t b3 = SPI.transfer((READ_WORD >> 8) & 0xff);
+    uint8_t b4 = SPI.transfer((READ_WORD >> 0) & 0xff);
+    digitalWrite(_sspin, HIGH);
+    SPI.endTransaction();
+	return (int32_t)((b1 << 24) | (b2 << 16) | (b3 << 8) | b4);
+}
+
 std::vector<uint8_t> Gyro::handleRequest(std::vector<uint8_t> &request) {
   if (request.size() != 1) {
     return {REQUEST_LENGTH_INVALID_CODE};

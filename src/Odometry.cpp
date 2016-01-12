@@ -5,7 +5,7 @@
 #include "config.h"
 
 namespace tamproxy {
-    Odometer::Odometer(Encoder& lEncoder, Encoder& rEncoder) : _encL(lEncoder), _encR(rEncoder) {
+    Odometer::Odometer(Encoder& lEncoder, Encoder& rEncoder, Gyroscope& gyro) : _encL(lEncoder), _encR(rEncoder), _gyro(gyro) {
     }
     
     std::vector<uint8_t> OdometerhandleRequest(std::vector<uint8_t> &request)

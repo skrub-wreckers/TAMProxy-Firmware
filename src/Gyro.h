@@ -14,6 +14,7 @@ private:
   static const uint32_t READ_WORD = 0x20000000;
 public:
   Gyro(uint8_t sspin);
+  uint32_t read();
   std::vector<uint8_t> handleRequest(std::vector<uint8_t> &request);
 };
 
