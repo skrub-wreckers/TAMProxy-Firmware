@@ -36,7 +36,7 @@ uint32_t Gyro::read()
     uint8_t b4 = SPI.transfer((READ_WORD >> 0) & 0xff);
     digitalWrite(_sspin, HIGH);
     SPI.endTransaction();
-	return (int32_t)((b1 << 24) | (b2 << 16) | (b3 << 8) | b4);
+	return (uint32_t)((b1 << 24) | (b2 << 16) | (b3 << 8) | b4);
 }
 
 std::vector<uint8_t> Gyro::handleRequest(std::vector<uint8_t> &request) {
