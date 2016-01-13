@@ -5,6 +5,7 @@
 #include <vector>
 #include "Device.h"
 #include "Encoder.h"
+#include "Gyro.h"
 
 namespace tamproxy {
 
@@ -12,7 +13,8 @@ class Odometer : public Device {
 private:
     Encoder& _encL;
     Encoder& _encR;
-    Gyroscope& _gyro;
+    Gyro& _gyro;
+    float _alpha; //Mixing weight for the gyroscope
 
     uint32_t _lastTime;
 
@@ -21,10 +23,8 @@ private:
 
     uint32_t _angle;
 
-    float _alpha; //Mixing weight for the gyroscope
-
 public:
-    Odometer(Encoder& lEncoder, Encoder& rEncoder, Gyroscope& gyro, float alpha);
+    Odometer(Encoder& lEncoder, Encoder& rEncoder, Gyro& gyro, float alpha);
     std::vector<uint8_t> handleRequest(std::vector<uint8_t> &request);
     void update();
 };

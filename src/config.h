@@ -46,6 +46,8 @@
 #define IR_CODE 'I'
 #define COLOR_CODE 'C'
 #define COLOR_READ_CODE 'R'
+#define ODOMETER_CODE 'O'
+#define ODOMETER_READ_CODE 'R'
 
 // PACKETS
 #define PACKET_START_BYTE 240

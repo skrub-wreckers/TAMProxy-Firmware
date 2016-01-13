@@ -113,6 +113,11 @@ std::vector<uint8_t> DeviceList::add(std::vector<uint8_t>& request) {
                 d = new Servo(request[2]);
             } else { return {REQUEST_LENGTH_INVALID_CODE}; };
             break;
+        case ODOMETER_CODE:
+            if (request.size() == 6) {
+                d = new Odometer(get(request[2]), get(request[3]), get(request[4]), request[5]);
+            } else { return {REQUEST_LENGTH_INVALID_CODE}; };
+            break;
         default:
             return {DEVICE_INVALID_CODE};
     }
