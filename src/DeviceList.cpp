@@ -115,7 +115,14 @@ std::vector<uint8_t> DeviceList::add(std::vector<uint8_t>& request) {
             break;
         case ODOMETER_CODE:
             if (request.size() == 6) {
-                d = new Odometer(get(request[2]), get(request[3]), get(request[4]), request[5]);
+                Encoder* enL = (Encoder*)get(request[2]);
+                Encoder* enR = (Encoder*)get(request[3]);
+                Gyro* gyd = (Gyro*)get(request[4]);
+                if((enL != nullptr) && (enR != nullptr) && (gyd != nullptr))
+                    d = new Odometer(*enL, *enR, *gyd, (float)request[5]);
+                else {
+
+                }
             } else { return {REQUEST_LENGTH_INVALID_CODE}; };
             break;
         default:
