@@ -15,6 +15,7 @@
 #include "Gyro.h"
 #include "Color.h"
 #include "Servo.h"
+#include "FeedbackMotor.h"
 
 namespace tamproxy {
 

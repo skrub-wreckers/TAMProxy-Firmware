@@ -27,4 +27,8 @@ std::vector<uint8_t> Motor::handleRequest(std::vector<uint8_t> &request) {
     }
 }
 
+void Motor::write() {
+
+}
+
 }
