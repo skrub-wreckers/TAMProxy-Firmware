@@ -47,8 +47,8 @@ namespace tamproxy {
         uint32_t rEncVal = _encR.read();
 
         // be careful about overflow here
-        int32_t diffEnc = lEncVal - rEncVal;
-        uint32_t meanEnc = rEncVal + diffEnc/2;
+        int32_t diffEnc = rEncVal - lEncVal;
+        uint32_t meanEnc = lEncVal + diffEnc/2;
 
         bool ok;
         float gyroRead = _gyro.read(ok);

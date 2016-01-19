@@ -28,6 +28,8 @@ Gyro::Gyro(uint8_t sspin) {
 
 float Gyro::read(bool &ok)
 {
+  // return CCW rad/s
+
   SPI.beginTransaction(SPISettings(CLOCK_SPEED, MSBFIRST, SPI_MODE0));
   digitalWrite(_sspin, LOW);
   uint8_t b1 = SPI.transfer((READ_WORD >> 24) & 0xff);
@@ -37,14 +39,14 @@ float Gyro::read(bool &ok)
   digitalWrite(_sspin, HIGH);
   SPI.endTransaction();
 
-  uint32_t ret_word = (uint32_t)((b1 << 24) | (b2 << 16) | (b3 << 8) | b4);
+  uint32_t ret_word = (b1 << 24) | (b2 << 16) | (b3 << 8) | b4;
 
   uint8_t st = (ret_word >> 26) & 0x3;
   ok = st == 0b01;
 
   int32_t reading = (ret_word >> 10) & 0xffff;
 
-  return reading * (2*M_PI / 360 / 80f);
+  return -reading * (2*M_PI / 360 / 80f);
 }
 
 std::vector<uint8_t> Gyro::handleRequest(std::vector<uint8_t> &request) {
