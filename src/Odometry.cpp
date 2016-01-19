@@ -65,7 +65,7 @@ namespace tamproxy {
             _angle = encAngle;
         }
 
-        float dr = static_cast<int32_t>(meanEnc - _lastMeanEnc)/ticksPerRev * wheelRadius;
+        float dr = static_cast<int32_t>(meanEnc - _lastMeanEnc)/ticksPerRad * wheelRadius;
         _x += dr * cos(_angle);
         _y += dr * sin(_angle);
 
