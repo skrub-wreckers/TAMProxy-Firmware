@@ -7,6 +7,7 @@
 
 namespace tamproxy {
 
+// For the ADXRS450
 class Gyro : public Device {
 private:
   uint8_t _sspin;
@@ -14,7 +15,7 @@ private:
   static const uint32_t READ_WORD = 0x20000000;
 public:
   Gyro(uint8_t sspin);
-  uint32_t read();
+  float read(bool &ok);
   std::vector<uint8_t> handleRequest(std::vector<uint8_t> &request);
 };
 
