@@ -32,7 +32,7 @@ namespace tamproxy {
     {
         const float ticksPerRev = 3200.0;
         const float wheelDiam = 3.78125;
-        const float baseWidth = 17; //inches
+        const float baseWidth = 15.3; //inches
 
         uint32_t lEncVal = _encL.read();
         uint32_t rEncVal = _encR.read();
@@ -45,8 +45,8 @@ namespace tamproxy {
         float gyroRead = _gyro.read(ok);
         if(!ok) return;
 
-        _gyroTot += gyroRead*(micros()-_lastTime); //Get the right number out of _gyro.read()
-        float encAngle = (diffEnc/ticksPerRev)*wheelDiam/(baseWidth*M_PI);
+        _gyroTot += gyroRead*(micros()-_lastTime);
+        float encAngle = (diffEnc/ticksPerRev)*wheelDiam/baseWidth;
         _angle = _alpha*_gyroTot + (1-_alpha)*encAngle;
 
         _lastTime = micros();
