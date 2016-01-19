@@ -18,10 +18,8 @@ private:
 
     uint32_t _lastTime;
 
-    uint32_t _gyroTot;
-    uint32_t _encTot;
-
-    uint32_t _angle;
+    float _gyroTot;
+    float _angle;
 
 public:
     Odometer(Encoder& lEncoder, Encoder& rEncoder, Gyro& gyro, float alpha);
