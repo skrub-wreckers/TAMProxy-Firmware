@@ -123,7 +123,7 @@ std::vector<uint8_t> DeviceList::add(std::vector<uint8_t>& request) {
                                  | (request[6] << 16)
                                  | (request[7] << 8)
                                  | (request[8] << 0);
-                    d = new Odometer(*enL, *enR, *gyd, *reinterpret_cast<float*>(&val););
+                    d = new Odometer(*enL, *enR, *gyd, *reinterpret_cast<float*>(&val));
                 }
                 else {
                     return {DEVICE_INVALID_CODE};
