@@ -38,8 +38,10 @@ namespace tamproxy {
     void Odometer::update()
     {
         const float ticksPerRev = 3200.0;
-        const float wheelDiam = 3.78125;
+        const float wheelRadius = 3.78125 / 2;
         const float baseWidth = 15.3; //inches
+
+        const float ticksPerRad = 3200.0 / (2*M_PI);
 
         uint32_t lEncVal = _encL.read();
         uint32_t rEncVal = _encR.read();
@@ -52,11 +54,11 @@ namespace tamproxy {
         float gyroRead = _gyro.read(ok);
         if(!ok) return;
 
-        _gyroTot += gyroRead*(micros()-_lastTime) / 1e6;
-        float encAngle = (diffEnc/ticksPerRev)*wheelDiam/(baseWidth / 2);
+        _gyroTot += gyroRead*(micros() - _lastTime) / 1e6;
+        float encAngle = (diffEnc/ticksPerRad) * wheelRadius/baseWidth;
         _angle = _alpha*_gyroTot + (1-_alpha)*encAngle;
 
-        float dr = static_cast<int32_t>(meanEnc - _lastMeanEnc)/ticksPerRev*wheelDiam*M_PI;
+        float dr = static_cast<int32_t>(meanEnc - _lastMeanEnc)/ticksPerRev * wheelRadius;
         _x += dr * cos(_angle);
         _y += dr * sin(_angle);
 
