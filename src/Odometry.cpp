@@ -56,7 +56,7 @@ namespace tamproxy {
 
         float dr = static_cast<int32_t>(meanEnc - _lastMeanEnc)/ticksPerRev*wheelDiam*M_PI;
         _x += dr * cos(_angle);
-        _y += dr * cos(_angle);
+        _y += dr * sin(_angle);
 
         _lastTime = micros();
     }
