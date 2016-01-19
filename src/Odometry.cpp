@@ -19,6 +19,7 @@ namespace tamproxy {
             if (request.size() != 1) return {REQUEST_LENGTH_INVALID_CODE};
 
             // here be dragons
+            float vals[] = {_angle, _x, _y};
             uint32_t val = *reinterpret_cast<uint32_t*>(&_angle);
 
             return {
@@ -50,8 +51,8 @@ namespace tamproxy {
         float gyroRead = _gyro.read(ok);
         if(!ok) return;
 
-        _gyroTot += gyroRead*(micros()-_lastTime);
-        float encAngle = (diffEnc/ticksPerRev)*wheelDiam/baseWidth;
+        _gyroTot += gyroRead*(micros()-_lastTime) / 1e6;
+        float encAngle = (diffEnc/ticksPerRev)*wheelDiam/(baseWidth / 2);
         _angle = _alpha*_gyroTot + (1-_alpha)*encAngle;
 
         float dr = static_cast<int32_t>(meanEnc - _lastMeanEnc)/ticksPerRev*wheelDiam*M_PI;
