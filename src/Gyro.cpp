@@ -46,7 +46,7 @@ float Gyro::read(bool &ok)
 
   int32_t reading = (ret_word >> 10) & 0xffff;
 
-  return -reading * (2*M_PI / 360 / 80f);
+  return -reading * (2*M_PI / 360 / 80.0f);
 }
 
 std::vector<uint8_t> Gyro::handleRequest(std::vector<uint8_t> &request) {
