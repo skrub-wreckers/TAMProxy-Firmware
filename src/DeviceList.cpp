@@ -108,8 +108,8 @@ std::vector<uint8_t> DeviceList::add(std::vector<uint8_t>& request) {
                 d = new Color(request[2], request[3]);
             } else { return {REQUEST_LENGTH_INVALID_CODE}; };
             break;
-	    case SERVO_CODE:
-		    if (request.size() == 3) {
+        case SERVO_CODE:
+            if (request.size() == 3) {
                 d = new Servo(request[2]);
             } else { return {REQUEST_LENGTH_INVALID_CODE}; };
             break;
