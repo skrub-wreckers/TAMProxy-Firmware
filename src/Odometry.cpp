@@ -11,7 +11,8 @@ namespace tamproxy {
           _gyro(gyro),
           _alpha(alpha),
           _lastTime(micros()),
-          _lastMeanEnc(0) { }
+          _lastMeanEnc(0),
+          _gyroTot(0) { }
 
     std::vector<uint8_t> Odometer::handleRequest(std::vector<uint8_t> &request)
     {
