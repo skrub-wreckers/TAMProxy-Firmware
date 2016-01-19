@@ -14,12 +14,15 @@ private:
     Encoder& _encL;
     Encoder& _encR;
     Gyro& _gyro;
-    float _alpha; //Mixing weight for the gyroscope
+    float _alpha = 0; //Mixing weight for the gyroscope
 
     uint32_t _lastTime;
 
     float _gyroTot;
-    float _angle;
+
+    float _angle = 0;
+    float _x = 0;
+    float _y = 0;
 
 public:
     Odometer(Encoder& lEncoder, Encoder& rEncoder, Gyro& gyro, float alpha);

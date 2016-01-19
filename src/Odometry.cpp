@@ -5,8 +5,13 @@
 #include "config.h"
 
 namespace tamproxy {
-    Odometer::Odometer(Encoder& lEncoder, Encoder& rEncoder, Gyro& gyro, float alpha) : _encL(lEncoder), _encR(rEncoder), _gyro(gyro), _alpha(alpha), _lastTime(micros())   {
-    }
+    Odometer::Odometer(Encoder& lEncoder, Encoder& rEncoder, Gyro& gyro, float alpha)
+        : _encL(lEncoder),
+          _encR(rEncoder),
+          _gyro(gyro),
+          _alpha(alpha),
+          _lastTime(micros()),
+          _lastMeanEnc(0) { }
 
     std::vector<uint8_t> Odometer::handleRequest(std::vector<uint8_t> &request)
     {
@@ -39,7 +44,7 @@ namespace tamproxy {
 
         // be careful about overflow here
         int32_t diffEnc = lEncVal - rEncVal;
-        int32_t meanEnc = rEncVal + diffEnc/2;
+        uint32_t meanEnc = rEncVal + diffEnc/2;
 
         bool ok;
         float gyroRead = _gyro.read(ok);
@@ -48,6 +53,10 @@ namespace tamproxy {
         _gyroTot += gyroRead*(micros()-_lastTime);
         float encAngle = (diffEnc/ticksPerRev)*wheelDiam/baseWidth;
         _angle = _alpha*_gyroTot + (1-_alpha)*encAngle;
+
+        float dr = static_cast<int32_t>(meanEnc - _lastMeanEnc)/ticksPerRev*wheelDiam*M_PI;
+        _x += dr * cos(_angle);
+        _y += dr * cos(_angle);
 
         _lastTime = micros();
     }
