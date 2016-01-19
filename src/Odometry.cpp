@@ -28,15 +28,24 @@ namespace tamproxy {
 
     void Odometer::update()
     {
+        const float ticksPerRev = 3200.0;
+        const float wheelDiam = 3.78125;
+        const float baseWidth = 17; //inches
+
         uint32_t lEncVal = _encL.read();
         uint32_t rEncVal = _encR.read();
 
-        _gyroTot += _gyro.read()*(micros()-_lastTime); //Get the right number out of _gyro.read()
-        float lDist = (_encL.read()/3200)*3.78125*3.14159; //Magic number = wheel diameter
-        float rDist = (_encR.read()/3200)*3.78125*3.14159;
-        float encAngle = 360*(lDist - rDist)/53.407; // 53.407" = Turn IP circumference
+        // be careful about overflow here
+        int32_t diffEnc = lEncVal - rEncVal;
+        int32_t meanEnc = rEncVal + diffEnc/2;
 
-        _angle = (_alpha*_gyroTot)+((1-_alpha)*encAngle);
+        bool ok;
+        float gyroRead = _gyro.read(ok);
+        if(!ok) return;
+
+        _gyroTot += gyroRead*(micros()-_lastTime); //Get the right number out of _gyro.read()
+        float encAngle = (diffEnc/ticksPerRev)*wheelDiam/(baseWidth*M_PI);
+        _angle = _alpha*_gyroTot + (1-_alpha)*encAngle;
 
         _lastTime = micros();
     }
