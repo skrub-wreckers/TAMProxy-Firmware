@@ -26,7 +26,7 @@ Gyro::Gyro(uint8_t sspin) {
   SPI.endTransaction();
 }
 
-float Gyro::read(bool &ok)
+int16_t Gyro::read(bool &ok)
 {
   // return CCW rad/s
 
@@ -44,8 +44,10 @@ float Gyro::read(bool &ok)
   uint8_t st = (ret_word >> 26) & 0x3;
   ok = st == 0b01;
 
-  int32_t reading = (ret_word >> 10) & 0xffff;
+  return (ret_word >> 10) & 0xffff;
+}
 
+float Gyro::toRadians(int16_t reading) {
   return -reading * (2*M_PI / 360 / 80.0f);
 }
 

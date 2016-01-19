@@ -51,8 +51,10 @@ namespace tamproxy {
         uint32_t meanEnc = lEncVal + diffEnc/2;
 
         bool ok;
-        float gyroRead = _gyro.read(ok);
+        int16_t rawGyro = _gyro.read(ok);
         if(!ok) return;
+        
+        float gyroRead = Gyro::toRadians(rawGyro);
 
         _gyroTot += gyroRead*(micros() - _lastTime) / 1e6;
         float encAngle = (diffEnc/ticksPerRad) * wheelRadius/baseWidth;
