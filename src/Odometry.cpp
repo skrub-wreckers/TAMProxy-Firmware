@@ -61,5 +61,6 @@ namespace tamproxy {
         _y += dr * sin(_angle);
 
         _lastTime = micros();
+        _lastMeanEnc = meanEnc;
     }
 }
