@@ -142,8 +142,9 @@ void DeviceList::clear() {
     for (uint8_t i = 0; i < NUM_PINS; i++) {
         pinMode(i, INPUT);
     }
-    for (uint8_t i = 0; i < _devices.size(); i++) {
-        delete _devices[i];
+    for (Device* d : _devices) {
+        if(d != nullptr)
+            delete d;
     }
     _devices.clear();
 }
