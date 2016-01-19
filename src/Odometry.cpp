@@ -41,8 +41,7 @@ namespace tamproxy {
         const float ticksPerRev = 3200.0;
         const float wheelRadius = 3.78125 / 2;
         const float baseWidth = 15.3; //inches
-
-        const float ticksPerRad = 3200.0 / (2*M_PI);
+        const float ticksPerRad = ticksPerRev / (2*M_PI);
 
         uint32_t lEncVal = _encL.read();
         uint32_t rEncVal = _encR.read();
