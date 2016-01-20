@@ -55,10 +55,12 @@ namespace tamproxy {
 
         // Use the gyro, if possible
         int16_t rawGyro = _gyro.read(_gyroOk);
+        uint32_t currTime = micros();
+
         if(_gyroOk) {
             float gyroRead = Gyro::toRadians(rawGyro);
 
-            _gyroTot += gyroRead*(micros() - _lastTime) / 1e6;
+            _gyroTot += gyroRead*(currTime - _lastTime) / 1e6;
             _angle = _alpha*_gyroTot + (1-_alpha)*encAngle;
         }
         else {
@@ -69,7 +71,7 @@ namespace tamproxy {
         _x += dr * cos(_angle);
         _y += dr * sin(_angle);
 
-        _lastTime = micros();
+        _lastTime = currTime;
         _lastMeanEnc = meanEnc;
     }
 }
