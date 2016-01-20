@@ -130,4 +130,11 @@ void DeviceList::clear() {
     _devices.clear();
 }
 
+void DeviceList::update() {
+    for (Device* d : _devices) {
+        if(d != nullptr)
+            d->update();
+    }
+}
+
 }
