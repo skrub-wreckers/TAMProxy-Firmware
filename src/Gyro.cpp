@@ -48,7 +48,7 @@ int16_t Gyro::read(bool &ok)
 }
 
 float Gyro::toRadians(int16_t reading) {
-  return -reading * (2*M_PI / 360 / 80.0f);
+  return -reading * (2*M_PI / 360 / 80.0);
 }
 
 std::vector<uint8_t> Gyro::handleRequest(std::vector<uint8_t> &request) {
