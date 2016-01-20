@@ -21,6 +21,7 @@ private:
     uint32_t _lastREncVal;
 
     float _angle = 0;
+    float _omega = 0;
     float _x = 0;
     float _y = 0;
     bool _gyroOk = false;

@@ -20,9 +20,9 @@ namespace tamproxy {
         if (request[0] == ODOMETER_READ_CODE) {
             if (request.size() != 1) return {REQUEST_LENGTH_INVALID_CODE};
 
-            std::vector<uint8_t> res(5*4 + 1);
+            std::vector<uint8_t> res(6*4 + 1);
             size_t i = 0;
-            for(float f : {_angle, _x, _y, dGyroDt, dEncDt}) {
+            for(float f : {_angle, _x, _y, _omega, dGyroDt, dEncDt}) {
                 // here be dragons
                 uint32_t val = *reinterpret_cast<uint32_t*>(&f);
                 res[i++] = static_cast<uint8_t>(val>>24);
@@ -60,25 +60,29 @@ namespace tamproxy {
         uint32_t currTime = micros();
         double dt = (currTime - _lastTime) / 1e6;
 
+        // smoothing for derivative - http://stackoverflow.com/q/1023860/102441
+        const float dencTau = 0.0025;
+        float dencAlpha = exp(-dt / dencTau);
+        dEncDt = dencAlpha * dEncDt + (1-dencAlpha) * (dAngleEnc / dt);
 
         float dAngle;
         if(_gyroOk) {
             dGyroDt = Gyro::toRadians(rawGyro);
             float dAngleGyro = dGyroDt * dt;
 
-            // smoothing for derivative - http://stackoverflow.com/q/1023860/102441
-            const float dencTau = 0.0025;
-            float dencAlpha = exp(-dt / dencTau);
-            dEncDt = dencAlpha * dEncDt + (1-dencAlpha) * (dAngleEnc / dt);
-
             //http://www-personal.umich.edu/~johannb/Papers/paper63.pdf
             float diffDt = abs(dGyroDt - dEncDt);
-            if(diffDt > _alpha)
+            if(diffDt > _alpha) {
+                _omega = dGyroDt;
                 dAngle = dAngleGyro;
-            else
+            }
+            else {
+                _omega = dEncDt;
                 dAngle = dAngleEnc;
+            }
         }
         else {
+            _omega = dEncDt;
             dAngle = dAngleEnc;
         }
 
