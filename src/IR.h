@@ -17,6 +17,7 @@ private:
 public:
     IR(uint8_t pin);
     std::vector<uint8_t> handleRequest(std::vector<uint8_t> &request);
+    void update() override;
 };
 
 }
