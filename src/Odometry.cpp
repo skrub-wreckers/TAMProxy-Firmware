@@ -58,16 +58,25 @@ namespace tamproxy {
         // Use the gyro, if possible
         int16_t rawGyro = _gyro.read(_gyroOk);
         uint32_t currTime = micros();
+        double dt = (currTime - _lastTime) / 1e6;
+
 
         float dAngle;
         if(_gyroOk) {
-            double dt = (currTime - _lastTime) / 1e6;
             dGyroDt = Gyro::toRadians(rawGyro);
-            dEncDt = dAngleEnc / dt;
             float dAngleGyro = dGyroDt * dt;
 
-            // do a filtering thing
-            dAngle = _alpha*dAngleGyro + (1 - _alpha)*dAngleEnc;
+            // smoothing for derivative - http://stackoverflow.com/q/1023860/102441
+            const float dencTau = 0.0025;
+            float dencAlpha = exp(-dt / dencTau);
+            dEncDt = dencAlpha * dEncDt + (1-dencAlpha) * (dAngleEnc / dt);
+
+            //http://www-personal.umich.edu/~johannb/Papers/paper63.pdf
+            float diffDt = abs(dGyroDt - dEncDt);
+            if(diffDt > _alpha)
+                dAngle = dAngleGyro;
+            else
+                dAngle = dAngleEnc;
         }
         else {
             dAngle = dAngleEnc;
