@@ -11,6 +11,7 @@ namespace tamproxy {
 // For long and short IR, not ultrashort ones
 class IR : public Device {
 private:
+	static const uint8_t AVERAGE_WINDOW = 20;
     uint8_t _pin;
     MovingAverage* avg;
 public:

@@ -11,7 +11,7 @@ namespace tamproxy {
 IR::IR(uint8_t pin) {
     _pin = pin;
     pinMode(pin, INPUT);
-    avg = new MovingAverage(10);
+    avg = new MovingAverage(AVERAGE_WINDOW);
 }
 
 std::vector<uint8_t> IR::handleRequest(std::vector<uint8_t> &request) {
