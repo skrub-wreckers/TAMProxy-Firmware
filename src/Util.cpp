@@ -6,15 +6,15 @@ namespace tamproxy {
     MovingAverage::MovingAverage(uint8_t maxSize) {
         size = maxSize;
         window = new uint16_t[size];
-        head = NULL;
-        tail = NULL;
+        head = nullptr;
+        tail = nullptr;
         total = 0;
     }
 
     // Adds a value to the average, pushing one out if nescessary
     void MovingAverage::add(uint16_t val) {
         // Special case: Initialization
-        if (head == NULL) {
+        if (head == nullptr) {
             head = window;
             *head = val;
             tail = head;
@@ -22,7 +22,7 @@ namespace tamproxy {
             total = val;
             return;
         }
- 
+
         // Were we already full?
         if (head == tail) {
             // Fix total-cache
@@ -30,11 +30,11 @@ namespace tamproxy {
             // Make room
             inc(head);
         }
- 
+
         // Write the value in the next spot.
         *tail = val;
         inc(tail);
- 
+
         // Update our total-cache
         total += val;
     }
@@ -59,7 +59,7 @@ namespace tamproxy {
 
     // Returns how many numbers we have stored.
     ptrdiff_t MovingAverage::windowSize() const {
-        if (head == NULL)
+        if (head == nullptr)
             return 0;
         if (head == tail)
             return size;
