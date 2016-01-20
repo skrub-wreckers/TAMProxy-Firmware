@@ -20,9 +20,9 @@ namespace tamproxy {
         if (request[0] == ODOMETER_READ_CODE) {
             if (request.size() != 1) return {REQUEST_LENGTH_INVALID_CODE};
 
-            std::vector<uint8_t> res(3*4 + 1);
+            std::vector<uint8_t> res(5*4 + 1);
             size_t i = 0;
-            for(float f : {_angle, _x, _y}) {
+            for(float f : {_angle, _x, _y, dAngleGyro, dAngleEnc}) {
                 // here be dragons
                 uint32_t val = *reinterpret_cast<uint32_t*>(&f);
                 res[i++] = static_cast<uint8_t>(val>>24);
@@ -53,7 +53,7 @@ namespace tamproxy {
         float dThetaR = static_cast<int32_t>(rEncVal - _lastREncVal)/ticksPerRad;
 
         // change in robot angle as estimated by encoders
-        float dAngleEnc = (dThetaR - dThetaL) * wheelRadius/baseWidth;
+        /*float*/ dAngleEnc = (dThetaR - dThetaL) * wheelRadius/baseWidth;
 
         // Use the gyro, if possible
         int16_t rawGyro = _gyro.read(_gyroOk);
@@ -61,7 +61,7 @@ namespace tamproxy {
 
         float dAngle;
         if(_gyroOk) {
-            float dAngleGyro = Gyro::toRadians(rawGyro)*(currTime - _lastTime) / 1e6;
+            /*float*/ dAngleGyro = Gyro::toRadians(rawGyro)*(currTime - _lastTime) / 1e6;
 
             // do a filtering thing
             dAngle = _alpha*dAngleGyro + (1 - _alpha)*dAngleEnc;

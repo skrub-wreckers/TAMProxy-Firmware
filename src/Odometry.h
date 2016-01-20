@@ -25,6 +25,10 @@ private:
     float _y = 0;
     bool _gyroOk = false;
 
+    // for debug
+    float dGyro;
+    float dEnc;
+
 
 public:
     Odometer(Encoder& lEncoder, Encoder& rEncoder, Gyro& gyro, float alpha);
