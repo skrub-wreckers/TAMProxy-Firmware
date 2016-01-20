@@ -11,8 +11,9 @@ namespace tamproxy {
           _gyro(gyro),
           _alpha(alpha),
           _lastTime(micros()),
-          _lastMeanEnc(0),
-          _gyroTot(0) { }
+          _lastLEncVal(0),
+          _lastREncVal(0)
+        { }
 
     std::vector<uint8_t> Odometer::handleRequest(std::vector<uint8_t> &request)
     {
@@ -47,31 +48,36 @@ namespace tamproxy {
         uint32_t lEncVal = _encL.read();
         uint32_t rEncVal = _encR.read();
 
-        // be careful about overflow here
-        int32_t diffEnc = rEncVal - lEncVal;
-        uint32_t meanEnc = lEncVal + diffEnc/2;
+        // calculate wheel angular changes since last run
+        float dThetaL = static_cast<int32_t>(lEncVal - _lastLEncVal)/ticksPerRad;
+        float dThetaR = static_cast<int32_t>(rEncVal - _lastREncVal)/ticksPerRad;
 
-        float encAngle = (diffEnc/ticksPerRad) * wheelRadius/baseWidth;
+        // change in robot angle as estimated by encoders
+        float dAngleEnc = (dThetaR - dThetaL) * wheelRadius/baseWidth;
 
         // Use the gyro, if possible
         int16_t rawGyro = _gyro.read(_gyroOk);
         uint32_t currTime = micros();
 
+        float dAngle;
         if(_gyroOk) {
-            float gyroRead = Gyro::toRadians(rawGyro);
+            float dAngleGyro = Gyro::toRadians(rawGyro)*(currTime - _lastTime) / 1e6;
 
-            _gyroTot += gyroRead*(currTime - _lastTime) / 1e6;
-            _angle = _alpha*_gyroTot + (1-_alpha)*encAngle;
+            // do a filtering thing
+            dAngle = _alpha*dAngleGyro + (1 - _alpha)*dAngleEnc;
         }
         else {
-            _angle = encAngle;
+            dAngle = dAngleEnc;
         }
 
-        float dr = static_cast<int32_t>(meanEnc - _lastMeanEnc)/ticksPerRad * wheelRadius;
-        _x += dr * cos(_angle);
-        _y += dr * sin(_angle);
+        // update estimates of position and angle
+        float dr = (dThetaR + dThetaL)/2 * wheelRadius;
+        _x += dr * cos(_angle + dAngle/2);
+        _y += dr * sin(_angle + dAngle/2);
+        _angle += dAngle;
 
         _lastTime = currTime;
-        _lastMeanEnc = meanEnc;
+        _lastLEncVal = lEncVal;
+        _lastREncVal = rEncVal;
     }
 }

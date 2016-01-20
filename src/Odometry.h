@@ -17,9 +17,8 @@ private:
     float _alpha = 0; //Mixing weight for the gyroscope
 
     uint32_t _lastTime;
-    uint32_t _lastMeanEnc;
-
-    float _gyroTot;
+    uint32_t _lastLEncVal;
+    uint32_t _lastREncVal;
 
     float _angle = 0;
     float _x = 0;
