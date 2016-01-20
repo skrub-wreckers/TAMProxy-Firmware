@@ -26,8 +26,8 @@ private:
     bool _gyroOk = false;
 
     // for debug
-    float dGyro;
-    float dEnc;
+    float dGyroDt;
+    float dEncDt;
 
 
 public:
