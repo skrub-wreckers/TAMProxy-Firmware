@@ -10,6 +10,7 @@ namespace tamproxy {
 class MovingAverage {
 public:
 	MovingAverage(uint8_t maxSize);
+	virtual ~MovingAverage();
 	void add(uint16_t val);
 	uint16_t avg() const;
  

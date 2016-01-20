@@ -11,6 +11,10 @@ namespace tamproxy {
         total = 0;
     }
 
+    MovingAverage::~MovingAverage() {
+        delete window;
+    }
+
     // Adds a value to the average, pushing one out if nescessary
     void MovingAverage::add(uint16_t val) {
         // Special case: Initialization
