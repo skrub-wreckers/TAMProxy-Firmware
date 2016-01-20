@@ -24,11 +24,13 @@ private:
     float _angle = 0;
     float _x = 0;
     float _y = 0;
+    bool _gyroOk = false;
+
 
 public:
     Odometer(Encoder& lEncoder, Encoder& rEncoder, Gyro& gyro, float alpha);
     std::vector<uint8_t> handleRequest(std::vector<uint8_t> &request);
-    void update();
+    void update() override;
 };
 
 }
