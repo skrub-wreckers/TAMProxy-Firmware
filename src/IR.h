@@ -13,7 +13,7 @@ class IR : public Device {
 private:
 	static const uint8_t AVERAGE_WINDOW = 20;
     uint8_t _pin;
-    MovingAverage* avg;
+    MovingAverage avg;
 public:
     IR(uint8_t pin);
     std::vector<uint8_t> handleRequest(std::vector<uint8_t> &request);
