@@ -42,7 +42,7 @@ namespace tamproxy {
     // Returns the average of the last P elements added to this SMA.
     // If no elements have been added yet, returns 0.0
     uint16_t MovingAverage::avg() const {
-        ptrdiff_t size = this->size();
+        ptrdiff_t size = this->windowSize();
         if (size == 0) {
             return 0; // No entries => 0 average
         }
@@ -51,14 +51,14 @@ namespace tamproxy {
 
     // Bumps the given pointer up by one.
     // Wraps to the start of the array if needed.
-    void inc(uint16_t * & p) {
+    void MovingAverage::inc(uint16_t * & p) {
         if (++p >= window + size) {
             p = window;
         }
     }
 
     // Returns how many numbers we have stored.
-    ptrdiff_t windowSize() const {
+    ptrdiff_t MovingAverage::windowSize() const {
         if (head == NULL)
             return 0;
         if (head == tail)

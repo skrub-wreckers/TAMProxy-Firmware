@@ -10,7 +10,7 @@ namespace tamproxy {
 class MovingAverage {
 public:
 	MovingAverage(uint8_t maxSize);
-	void add(double val);
+	void add(uint16_t val);
 	uint16_t avg() const;
  
 private:
@@ -21,9 +21,7 @@ private:
 	uint32_t total; // Cache the total so we don't sum everything each time.
  
 	void inc(uint16_t * & p);
- 
-	// Returns how many numbers we have stored.
-	ptrdiff_t windowSize();
+	ptrdiff_t windowSize() const;
 };
 
 }
