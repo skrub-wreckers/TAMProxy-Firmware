@@ -23,6 +23,7 @@ void setup() {
 }
 
 void loop() {
+    dl->update();
     if (pc->receive()) {
         // A new packet has arrived. Retrieve it.
         Packet *latestPacket = pc->getLatestPacket();

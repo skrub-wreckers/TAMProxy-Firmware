@@ -15,6 +15,7 @@
 #include "Gyro.h"
 #include "Color.h"
 #include "Servo.h"
+#include "IR.h"
 
 namespace tamproxy {
 
@@ -112,6 +113,11 @@ std::vector<uint8_t> DeviceList::add(std::vector<uint8_t>& request) {
                 d = new Servo(request[2]);
             } else { return {REQUEST_LENGTH_INVALID_CODE}; };
             break;
+        case IR_CODE:
+            if (request.size() == 3) {
+                d = new IR(request[2]);
+            } else { return {REQUEST_LENGTH_INVALID_CODE}; };
+            break;
         default:
             return {DEVICE_INVALID_CODE};
     }
@@ -128,6 +134,13 @@ void DeviceList::clear() {
         delete _devices[i];
     }
     _devices.clear();
+}
+
+void DeviceList::update() {
+    for (Device* d : _devices) {
+        if(d != nullptr)
+            d->update();
+    }
 }
 
 }
