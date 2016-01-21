@@ -18,6 +18,7 @@ private:
 
 public:
     Encoder(uint8_t pinA, uint8_t pinB);
+    uint32_t read();
     std::vector<uint8_t> handleRequest(std::vector<uint8_t> &request);
 };
 

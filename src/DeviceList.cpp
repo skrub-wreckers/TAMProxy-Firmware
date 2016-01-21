@@ -15,6 +15,7 @@
 #include "Gyro.h"
 #include "Color.h"
 #include "Servo.h"
+#include "Odometry.h"
 #include "IR.h"
 
 namespace tamproxy {
@@ -108,14 +109,31 @@ std::vector<uint8_t> DeviceList::add(std::vector<uint8_t>& request) {
                 d = new Color(request[2], request[3]);
             } else { return {REQUEST_LENGTH_INVALID_CODE}; };
             break;
-	    case SERVO_CODE:
-		    if (request.size() == 3) {
+        case SERVO_CODE:
+            if (request.size() == 3) {
                 d = new Servo(request[2]);
             } else { return {REQUEST_LENGTH_INVALID_CODE}; };
             break;
         case IR_CODE:
             if (request.size() == 3) {
                 d = new IR(request[2]);
+            } else { return {REQUEST_LENGTH_INVALID_CODE}; };
+            break;
+        case ODOMETER_CODE:
+            if (request.size() == 9) {
+                Encoder* enL = (Encoder*)get(request[2]);
+                Encoder* enR = (Encoder*)get(request[3]);
+                Gyro* gyd = (Gyro*)get(request[4]);
+                if((enL != nullptr) && (enR != nullptr) && (gyd != nullptr)){
+                    uint32_t val = (request[5] << 24)
+                                 | (request[6] << 16)
+                                 | (request[7] << 8)
+                                 | (request[8] << 0);
+                    d = new Odometer(*enL, *enR, *gyd, *reinterpret_cast<float*>(&val));
+                }
+                else {
+                    return {DEVICE_INVALID_CODE};
+                }
             } else { return {REQUEST_LENGTH_INVALID_CODE}; };
             break;
         default:

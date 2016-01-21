@@ -10,12 +10,17 @@ namespace tamproxy {
 Encoder::Encoder(uint8_t pinA, uint8_t pinB) : _pinA(pinA), _pinB(pinB), _enc(pinA, pinB) {
 }
 
+uint32_t Encoder::read()
+{
+    return _enc.read();
+}
+
 std::vector<uint8_t> Encoder::handleRequest(std::vector<uint8_t> &request) {
     if (request[0] == ENCODER_READ_CODE) {
         if (request.size() != 1) return {REQUEST_LENGTH_INVALID_CODE};
 
         // library is bad, should use unsigned for well-defined overflow
-        uint32_t val = static_cast<uint32_t>(_enc.read());
+        uint32_t val = static_cast<uint32_t>(read());
         return {
             static_cast<uint8_t>(val>>24),
             static_cast<uint8_t>(val>>16),
