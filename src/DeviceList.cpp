@@ -16,6 +16,7 @@
 #include "Color.h"
 #include "Servo.h"
 #include "Odometry.h"
+#include "IR.h"
 
 namespace tamproxy {
 
@@ -113,6 +114,11 @@ std::vector<uint8_t> DeviceList::add(std::vector<uint8_t>& request) {
                 d = new Servo(request[2]);
             } else { return {REQUEST_LENGTH_INVALID_CODE}; };
             break;
+        case IR_CODE:
+            if (request.size() == 3) {
+                d = new IR(request[2]);
+            } else { return {REQUEST_LENGTH_INVALID_CODE}; };
+            break;
         case ODOMETER_CODE:
             if (request.size() == 9) {
                 Encoder* enL = (Encoder*)get(request[2]);
@@ -137,7 +143,7 @@ std::vector<uint8_t> DeviceList::add(std::vector<uint8_t>& request) {
     return {OK_CODE, static_cast<uint8_t>(_devices.size()-1)};
 }
 
-// Clears the device list and resets all pins, makin sure that the devices get deallocated
+// Clears the device list and resets all pins, making sure that the devices get deallocated
 void DeviceList::clear() {
     for (uint8_t i = 0; i < NUM_PINS; i++) {
         pinMode(i, INPUT);
