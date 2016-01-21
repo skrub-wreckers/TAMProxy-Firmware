@@ -28,7 +28,7 @@ Gyro::Gyro(uint8_t sspin) {
 
 int16_t Gyro::read(bool &ok)
 {
-  // return CCW rad/s
+  // returns units of 1/80 deg/s
 
   SPI.beginTransaction(SPISettings(CLOCK_SPEED, MSBFIRST, SPI_MODE0));
   digitalWrite(_sspin, LOW);
