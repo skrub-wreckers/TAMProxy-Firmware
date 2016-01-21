@@ -14,7 +14,7 @@ private:
     Encoder& _encL;
     Encoder& _encR;
     Gyro& _gyro;
-    float _alpha = 0; //Mixing weight for the gyroscope
+    float _diffThresh = 0;
 
     uint32_t _lastTime;
     uint32_t _lastLEncVal;

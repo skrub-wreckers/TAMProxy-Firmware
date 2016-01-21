@@ -5,11 +5,11 @@
 #include "config.h"
 
 namespace tamproxy {
-    Odometer::Odometer(Encoder& lEncoder, Encoder& rEncoder, Gyro& gyro, float alpha)
+    Odometer::Odometer(Encoder& lEncoder, Encoder& rEncoder, Gyro& gyro, float diffThresh)
         : _encL(lEncoder),
           _encR(rEncoder),
           _gyro(gyro),
-          _alpha(alpha),
+          _diffThresh(diffThresh),
           _lastTime(micros()),
           _lastLEncVal(0),
           _lastREncVal(0)
@@ -72,7 +72,7 @@ namespace tamproxy {
 
             //http://www-personal.umich.edu/~johannb/Papers/paper63.pdf
             float diffDt = abs(dGyroDt - dEncDt);
-            if(diffDt > _alpha) {
+            if(diffDt > _diffThresh) {
                 _omega = dGyroDt;
                 dAngle = dAngleGyro;
             }
