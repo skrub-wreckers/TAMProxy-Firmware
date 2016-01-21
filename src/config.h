@@ -44,6 +44,7 @@
 #define GYRO_READ_CODE 'R'
 #define ULTRASONIC_CODE 'U'
 #define IR_CODE 'I'
+#define IR_READ_CODE 'R'
 #define COLOR_CODE 'C'
 #define COLOR_READ_CODE 'R'
 
