@@ -49,6 +49,7 @@
 #define SERVO_CODE 'S'
 #define SERVO_WRITE_CODE 'W'
 #define STEPPER_CODE 's'
+#define GYRO_CALIBRATE_CODE 'C'
 #define ULTRASONIC_CODE 'U'
 
 // PACKETS
